@@ -54,7 +54,6 @@ class Ui_MainWindow(object):
         self.id.setText(_translate("MainWindow", "id"))
         self.pw.setText(_translate("MainWindow", "password"))
 
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
