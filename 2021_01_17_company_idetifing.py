@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[8]:
-
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import pymysql
@@ -58,9 +52,7 @@ def insta_postList(driver):
     print(len(insta_post_Urls_List))
     insta_accounts(driver,insta_post_Urls_List)
 ###
-
 def insta_accounts(driver,insta_post_Urls_List):
-    company=[]
     for urlList in insta_post_Urls_List:
         driver.get(urlList)
         time.sleep(1)
@@ -101,7 +93,7 @@ def insta_accounts(driver,insta_post_Urls_List):
             if checks.find('인증됨') == -1 and int(userFollower) <= 100000:
                 for word in ['문의', '이벤트', '주문', '공구', '협찬', '판매', '마켓', '블로그', '링크', '세일', '할인', '카톡',
                             '카카오톡', '구매', '구입', '다이렉트', '택배', '배송', '제품', '상품', '스토어', '상점', '입금',
-                            '플랫폼', 'DM', '디엠', '가격','오픈', 'kakaotalk', 'shop', '쇼핑몰', '샵','open']:
+                            '플랫폼', 'DM', '디엠', '가격']:
                     if intro.find(word) != -1:
                         company.append(userID)
                         break
@@ -111,35 +103,21 @@ def insta_accounts(driver,insta_post_Urls_List):
 ###
 def add_company(company):
     # 중복 제거
-    f = open("C:/Users/정수/8%_project_python__int/8percent_company.txt", 'r')
+    f = open("C:/Users/USER-PC/Desktop/company.txt", 'r')
     lines = f.readlines()
     companyList = company + lines
     companySet = set(companyList)
     f.close()
     # 메모장에 저장
-    f = open("C:/Users/정수/8%_project_python__int/8percent_company.txt", 'w')
+    f = open("C:/Users/USER-PC/Desktop/company.txt", 'w')
     for account in companySet:
         data = account + "\n"
         f.write(data)
     f.close()
 ###
-#hashtagList = ['마켓', '쇼핑몰', '패션', '이벤트', '블로그마켓', '화장품']
-hashtagList = ['이벤트']
+hashtagList = ['마켓', '쇼핑몰', '패션', '이벤트', '블로그마켓', '화장품']
 for hashtag in hashtagList:
-    user_id = "jjungsu_drawing"
-    user_pw = "jsjs532525!!"
+    user_id = "id"
+    user_pw = "pw"
     search = hashtag
     loginUrl(user_id, user_pw)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
