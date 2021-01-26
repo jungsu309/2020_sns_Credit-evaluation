@@ -7,6 +7,7 @@ import pymysql
 import time
 import datetime
 import demoji
+
 # 이모지 제거
 # demoji.download_codes()
 def loginUrl(user_id, user_pw):
@@ -28,15 +29,17 @@ def loginUrl(user_id, user_pw):
         print("잘못된 아이디 또는 비밀번호입니다.")
 
 company_list=[]
-f=open("C:/Users/정수/8%_project_python__int/8percent_company.txt", 'r')
+f=open("자기 텍스트 파일 경로 ", 'r')
 while True:
     line = f.readline()
     company_list.append(line)
     if not line: break
 f.close()
 print(company_list)
-#파일 불러왔다 가정하기
+
+#파일 불러왔다 가정하기- 시험삼아 해볼때 쓰면 편하다.
 # company_list=['인스타 계정']
+
 def insta_account(driver,company_list):
     #이거 꼭 해줘야하는지 잘모르겠음
     url_tmp = driver.current_url
@@ -79,38 +82,53 @@ def insta_account(driver,company_list):
         connectDB1(dbData)
         insta_post_page(driver)
 
-
 #한 회사의 게시글 목록 가져오는거..
 def insta_post_page(driver):
     url = driver.current_url
     insta_post_Urs=[]
+    
+    # 게시글 url 리스트
     insta_post_Urs_List = []
+        
     driver.get(url)
     time.sleep(2)
+    
+    
        # 스크롤 높이 가져옴
     last_height = driver.execute_script("return document.body.scrollHeight")
+
     while True:
+            
         insta_post_Urs= driver.find_elements_by_css_selector("._2z6nI .Nnq7C.weEfm .v1Nh3.kIKUG._bz0w a")
         for urlList in insta_post_Urs:
             insta_post_Urs_List.append(urlList.get_attribute("href"))
+        
     # 끝까지 스크롤 다운
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
     # 1초 대기
         time.sleep(5)
+        
     # 스크롤 다운 후 스크롤 높이 다시 가져옴
         new_height = driver.execute_script("return document.body.scrollHeight")
-        #마지막부분
+    
+        #순서 섞이긴 하는데 상위 100개가 섞이는 것이다.
+        #근데 딱 100개가 잘리는게아님... 3의 배수로 짤림 일단 그건 넘기고..
+        insta_post_Url_List = list(set(insta_post_Urs_List))
+        
+        # 시험삼아 할때는 20개? 만 해보기=>그래도 맨날 24개나옴
+        if len(insta_post_Url_List) >= 20:
+            break
+        
+#         마지막부분
         if new_height == last_height:
             break
-        last_height = new_height
-    #url중복 제거하는 부분. 스크롤 하면서 겹치는 주소 발생하므로 그걸 지워주는 역할을 한다.
-    #일단 처음부터 끝까지 주소를 중복되게 많이 가져온 다음 마지막에 중복 주소를 싹 없애게끔 하도록 설계하였다.
-    #이 방법은 순서가 섞이게 되는 방법이다.
-    #set이용
-    insta_post_Urs_List = list(set(insta_post_Urs_List))
-    print(len(insta_post_Urs_List))#게시글 갯수. 모두 잘 나왔는지 확인용
-    insta_post_Info(driver,insta_post_Urs_List)
 
+        last_height = new_height
+        
+    print(len(insta_post_Url_List))
+    
+    insta_post_Info(driver, insta_post_Url_List)  
 
 def insta_post_Info(driver,insta_post_Urs_List):
     for urlList in insta_post_Urs_List:
@@ -121,6 +139,7 @@ def insta_post_Info(driver,insta_post_Urs_List):
             userID=""
             userID_temp = driver.find_elements_by_css_selector(".sqdOP.yWX7d._8A5w5.ZIAjV")
             userID = userID_temp[0].text
+            
             #위치정보 내용
             locations = ""
             locationsList = driver.find_elements_by_css_selector(".JF9hh")
@@ -138,6 +157,8 @@ def insta_post_Info(driver,insta_post_Urs_List):
             Contents = Content_temp.text
             #이모티콘 지우는 코드. 위에 import demoji 이용.
             Contents = demoji.replace(Contents," ")
+            
+            
             # 게시글 날짜
             dates = ""
             dateList = driver.find_elements_by_css_selector("._1o9PC.Nzb55")
@@ -145,11 +166,18 @@ def insta_post_Info(driver,insta_post_Urs_List):
                 date = date.get_attribute('title')
                 dates = dates + date
             #좋아요 수
-            likes = ""
-            like_List = driver.find_elements_by_css_selector(".Nm9Fw span")
-            likes = like_List[0].text
+            try:
+                likes = ""
+                like_List = driver.find_elements_by_css_selector(".Nm9Fw span")
+                likes = like_List[0].text
+            except:
+                looks = ""
+                look_List = driver.find_elements_by_css_selector(".vcOH2 span")
+                looks = look_List[0].text
+            
             print("- url - ")
             print(urlList)
+            
             print("- 계정이름 - ")
             print(userID)
             print("\n- 위치 정보 - ")
@@ -162,12 +190,18 @@ def insta_post_Info(driver,insta_post_Urs_List):
             print(dates)
             print("\n- 좋아요수 - ")
             print(likes)
+            print("\n- 조회수 - ")
+            print(looks)
+            
 #             company_post
-            dbData2 = [[urlList,userID,locations,tags,Contents,dates]]
+            dbData2 = [[urlList,userID,locations,tags,Contents,dates,likes,looks]]
             connectDB2(dbData2)
+
+
         except:
             continue
 
+        
 #company_profile
 def connectDB1(dbData):
     DB_HOST = '127.0.0.1'
@@ -185,24 +219,32 @@ def connectDB1(dbData):
     conn.close()
     
 def connectDB2(dbData2):
+
     DB_HOST = '127.0.0.1'
     DB_USER = 'root'
     DB_PASSWD = 'autoset'
     #각자 데이터베이스의 이름
     DB_NAME = '8percent'
+    
     conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWD,
                        db=DB_NAME, charset='utf8')
+    
     curs = conn.cursor()
     #테이블이름
-#     sql2 = """insert into company_post(url,id,location,tags,contents,date,like) values (%s, %s, %s, %s, %s, %s, %s)"""
-    sql2 = """insert into company_post(url,id,location,tags,contents,date) values (%s, %s, %s, %s, %s, %s)"""
+    sql2 = """insert into company_post(url,id,location,tags,contents,date,likes,looks) values (%s, %s, %s, %s, %s, %s, %s, %s)"""
+
     curs.executemany(sql2, dbData2)
+    
     conn.commit()
+
     conn.close()
 
 #SQL
 #id가 왜 초록글자일까..
+
+
 #프라이머리키 no일까 id일까? id도 중복 안될텐데..
+
 # CREATE TABLE `company_profile`(
 #     `no` INT(20) NOT NULL AUTO_INCREMENT,
 #     `url` VARCHAR(100) NULL DEFAULT NULL,
@@ -213,7 +255,12 @@ def connectDB2(dbData2):
 #     `intro` VARCHAR(100) NULL DEFAULT NULL,
 #     PRIMARY KEY(`no`)
 #     )DEFAULT CHARSET=utf8;
+
+
+
 # 이건 프라이머리키 no맞는듯
+#변수 이름 like->likes,
+#조회수 looks 변수 추가
 # CREATE TABLE `company_post`(
 #     `no` INT(20) NOT NULL AUTO_INCREMENT,
 #     `url` VARCHAR(100) NULL DEFAULT NULL,
@@ -222,7 +269,8 @@ def connectDB2(dbData2):
 #     `tags` VARCHAR(100) NULL DEFAULT NULL,
 #     `contents` VARCHAR(100) NULL DEFAULT NULL,
 #     `date` VARCHAR(100) NULL DEFAULT NULL,
-#     `like` VARCHAR(100) NULL DEFAULT NULL,
+#     `likes` VARCHAR(100) NULL DEFAULT NULL,
+#     `looks` VARCHAR(100) NULL DEFAULT NULL,
 #     PRIMARY KEY(`no`)
 #     )DEFAULT CHARSET=utf8;
 
