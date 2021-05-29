@@ -1,0 +1,13 @@
+@import "screen/reset.css";
+
+@import "component/top-bar.css";
+@import "component/intro.css";
+
+@import "component/table-style.css";
+
+@import "component/result.css";
+
+body {
+  height: 300vh;
+  padding-top: 150px;
+}

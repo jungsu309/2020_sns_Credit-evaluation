@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&display=swap" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <!-- d3.js -->
+  <script src="https://d3js.org/d3.v4.js"></script>
+
+  <!-- chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    #img1 {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    #img2 {
+      width: 250px;
+      height: 90px;
+      z-index: 1;
+      margin: 5px 0px 5px 20px;
+    }
+
+    .intro-photo {
+      float: right;
+      width: 400px;
+      height: 400px;
+      margin: 0 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 맨 위에 top-bar -->
+  <div class="top-bar">
+    <div style="position: fixed;">
+      <img src="insta_6.jpg" id="img1"></img>
+    </div>
+
+    <div style="position: fixed;">
+      <a href="index.html"><img src="inst.png" id="img2"></img></a>
+    </div>
+  </div>
+
+  <div class="intro">
+    <div class="intro-text">
+      <h3>
+        인스타그램 계정의 발전가능성을<br />
+        알아보시겠습니까?
+      </h3>
+      <h5>인스타그램 발전가능성 알아보기</h5>
+      <div class="intro-introduction">
+        <p><i class="far fa-check-circle"></i>계정의 간단한<br>프로필 알아보기</p>
+        <p> <i class="far fa-check-circle"></i>계정의 랭킹<br>알아보기</p>
+        <p> <i class="far fa-check-circle"></i>계정의 변화<br>그래프로 알아보기</p>
+      </div><br /><br /><br />
+      <div class="IDinput">
+        <input required type="text" placeholder="인스타그램 아이디를 입력해주세요" id="userId" />
+        <button type="button" id="btn" 클릭><i class="fas fa-search"></i></button>
+      </div>
+      <div>
+        <a href='#important' style="color: white; background-color:#CAA4D4;
+        font-weight: bolder; font-size: 20px; padding: 5px; border-radius: 20px;">
+          &nbsp;중요 변수들의 분포 보기&nbsp;</a> <br /><br /><br /><br /><br />
+      </div>
+    </div>
+
+    <!-- id input 아이디 넣는 곳 디자인 -->
+    <div class="intro-photo">
+      <img class="intro-photo__jpg" src="photo1.jpg" />
+      <div class="intro-photo__icon">
+        <i class="far fa-comment-dots fa-2x"></i>
+        <i class="fas fa-heart fa-2x"></i>
+        <i class="fas fa-hashtag fa-3x"></i>
+        <i class="fas fa-heartbeat fa-2x"></i>
+        <i class="far fa-comments fa-2x"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- table output 테이블 디자인 -->
+  <div class="table-style">
+    <table border="10" width="600" height="30" align="center" id="table">
+      <tr class="table-name">
+        <th>instagram ID</th>
+        <th>follower</th>
+        <th>following</th>
+        <th>게시글 수</th>
+        <th>ranking</th>
+      </tr>
+    </table>
+  </div><br /><br />
+
+  <div class="result">
+    <div class="result-title" style="text-align: center;">
+      <i class="fas fa-trophy"></i> <span id="result-1">Instagram ID</span>님의 발전가능성 랭킹을 확인하세요
+    </div><br />
+
+    <div class="result-predict">
+      <!-- <div>발전가능성 10%</div> -->
+      <div>본 계정의 발전가능성은 <span id="result-5">[ ]</span>% 입니다</div><br>
+      <div><span id="result-2">[ ]</span>/ 199 (명)으로 상위 <span id="result-6">[ ]</span>% 입니다</div><br />
+      <div>현재 팔로워 수는 <span id="result-3">[ ]</span>명이고 다음주 예측 팔로워 수는 <span id="result-4">[ ]</span>명입니다.</div><br />
+    </div><br /><br /><br /><br /><br />
+
+    <div id="important" style="font-size: 25px; text-align: center; color: white;
+    background-image: url('insta_7.png'); background-repeat: no-repeat; background-position:center; padding: 10px;">
+      &nbsp;&lt;중요 변수들의 분포&gt;&nbsp;
+    </div><br /><br /><br /><br /><br />
+
+    <!-- 분포 그래프 -->
+    <div id="my_histo" style="text-align: center;"></div>
+
+    <div>
+      <script>
+        d3.csv("https://raw.githubusercontent.com/annyoon/Industry-Academia.Project/master/Dataset/profile0501.csv", function (profile0501) {
+          histoStyle(10, 30, 30, 40, 900, 400);
+          drawHisto(profile0501, 'followerNum', 9, 28583, 300, "#A03C8E");
+          histoStyle(10, 30, 30, 40, 900, 400);
+          drawHisto(profile0501, 'followingNum', 4, 7504, 100, "#C1376E");
+          histoStyle(10, 30, 30, 40, 900, 400);
+          drawHisto(profile0501, 'postNum', 4, 12753, 150, "#E93246");
+          histoStyle(10, 30, 30, 40, 900, 400);
+          drawHisto(profile0501, 'likeMean7', 3, 1116, 100, "#FC6F43");
+          histoStyle(10, 30, 30, 40, 900, 400);
+          drawHisto(profile0501, 'postUpload', 0, 37, 20, "#FEBB58");
+        });
+      </script>
+    </div>
+
+    <!-- 분석 그래프 -->
+    <div>
+      <canvas id="chart_rank" style="width:60vw; height:30vh"></canvas>
+    </div>
+
+    <div>
+      <div style=" float: left; width: 33%;">
+        <canvas id="chart_post" style="width:20vw; height:40vh "></canvas>
+      </div>
+
+      <div style=" float: left; width: 33%;">
+        <canvas id="chart_like" style="width:20vw; height:40vh "></canvas>
+      </div>
+
+      <div style=" float: left; width: 33%;">
+        <canvas id="chart_upload" style="width:20vw; height:40vh "></canvas>
+      </div>
+    </div>
+
+    <!-- 수집 그래프 넣기 -->
+    <div style=" float: left; width: 33%;">
+      <canvas id="collected_chart_follower" style="width:20vw; height:40vh"></canvas>
+    </div>
+    <div style=" float: left; width: 33%;">
+      <canvas id="collected_chart_following" style="width:20vw; height:40vh"></canvas>
+    </div>
+    <div style=" float: left; width: 33%;">
+      <canvas id="collected_chart_post" style="width:20vw; height:40vh"></canvas>
+    </div>
+  </div>
+
+  <script src="https://kit.fontawesome.com/6478f529f2.js" crossorigin="anonymous"></script>
+</body>
+
+<script type="text/javascript">
+  // global variables
+  var jsonRepository = {};
+  var jsonRepository2 = {};
+
+  // 컬럼 생성
+  var ids = [];
+  var followernum = [];
+  var followingnum = [];
+  var postnum = [];
+  var like_mean_7 = [];
+  var post_upload = [];
+  var rank = [];
+  var codingdate = [];
+  var nextfollower = [];
+  var rate_rank = [];
+  // functions
+
+  // get file from github
+  $.ajax({
+    url: "https://raw.githubusercontent.com/jungsu309/2020_sns_Credit-evaluation/master/jsondata/all_profile_Rate_json.json",
+    dataType: "json"
+  }).done(function (result) {
+    jsonRepository = result;
+    randerData()
+  });
+
+  $.ajax({
+    url: "https://raw.githubusercontent.com/jungsu309/2020_sns_Credit-evaluation/master/jsondata/profile_0308-0426_all_final.json",
+    dataType: "json"
+  }).done(function (result) {
+    jsonRepository2 = result;
+  });
+
+  function randerData() {
+    for (var i = 0; i < jsonRepository.length; i++) {
+      // 출력하고싶은 열들 리스트 만든거에 넣어주기.. (전부 다 넣는다.)
+      ids.push(jsonRepository[i]["A"]);
+      followernum.push(jsonRepository[i]["F"]);
+      followingnum.push(jsonRepository[i]["G"]);
+      postnum.push(jsonRepository[i]["E"]);
+      rank.push(Math.round(jsonRepository[i]["V"] * 10) / 10);
+      codingdate.push(jsonRepository[i]["C"]);
+      like_mean_7.push(jsonRepository[i]["K"]);
+      post_upload.push(Math.round(jsonRepository[i]["O"] * 10) / 10);
+      nextfollower.push(jsonRepository[i]["S"]);
+      rate_rank.push(jsonRepository[i]["U"]);
+    }
+  }
+
+  function renderDataById(id) {
+    // console.log(jsonRepository);
+    // console.log(id);
+
+    // 그래프그릴때 필요한 변수들
+    var rank_list = [];
+    var date_list = [];
+    var post_list = [];
+    var like_mean_7_list = [];
+    var post_upload_list = [];
+
+    for (var i = 0; i < jsonRepository.length; i++) {
+      // 출력하고싶은 열들 리스트 만든거에 넣어주기.. (전부 다 넣는다.)
+      // console.log(ids);
+      if (ids[i] === id && codingdate[i] == "2021-05-01") {
+        // 출력하고자 하는 데이터들을 함수에 넣어준다!
+        createTable(i, ids, followernum, followingnum, postnum, rank, codingdate);
+      }
+      if (ids[i] === id && (codingdate[i] == "2021-04-10" || codingdate[i] == "2021-04-17" || codingdate[i] == "2021-04-24" || codingdate[i] == "2021-05-01")) {
+        // 랭크 퍼센트 그래프 그리기
+        rank_list.push(rank[i]);
+        date_list.push(codingdate[i]);
+        // 중요변수 그래프그릴때 필요한 리스트
+        post_list.push(postnum[i]);
+        like_mean_7_list.push(like_mean_7[i]);
+        post_upload_list.push(post_upload[i]);
+      }
+      else {
+        continue;
+      }
+    }
+    // console.log(date_list);
+    // console.log(rank_list);
+    // console.log(post_list);
+    // console.log(like_mean_7_list);
+    // console.log(hashtag_average_list);
+
+    // 빨강
+    create_Chart_reverse("chart_rank", date_list, rank_list, "Development potential", 'rgb(255, 0, 0)', '4주간 순위 변화');
+    // 초록
+    create_Chart("chart_post", date_list, post_list, "post posting number", 'rgb(107, 142, 35)', '포스팅한 게시물');
+    // 하늘
+    create_Chart("chart_like", date_list, like_mean_7_list, "post like (7days) number", 'rgb(72, 209, 204)', '지난 7일간 받은 좋아요 개수');
+    // 보라
+    create_Chart("chart_upload", date_list, post_upload_list, "post upload period", 'rgb(147, 112, 219)', '포스트 업로드 주기');
+  }
+
+  function collected_renderDataById(id) {
+    // console.log(jsonRepository2);
+    var ids2 = [];
+    var followernum2 = [];
+    var followingnum2 = [];
+    var postnum2 = [];
+    var codingdate2 = [];
+
+    var date2_list = [];
+    var follower2_list = [];
+    var following2_list = [];
+    var post2_list = [];
+    for (var i = 0; i < jsonRepository2.length; i++) {
+      // 출력하고싶은 열들 리스트 만든거에 넣어주기.. (전부 다 넣는다.)
+      ids2.push(jsonRepository2[i]["id"]);
+      followernum2.push(jsonRepository2[i]["followernum"]);
+      followingnum2.push(jsonRepository2[i]["followingnum"]);
+      postnum2.push(jsonRepository2[i]["postnum"]);
+      codingdate2.push(jsonRepository2[i]["codingdate"]);
+
+      if (ids2[i] === id) {
+        date2_list.push(codingdate2[i]);
+        // 보여주고싶은 그래프
+        follower2_list.push(followernum2[i]);
+        following2_list.push(followingnum2[i]);
+        post2_list.push(postnum2[i]);
+      }
+      else {
+        continue;
+      }
+    }
+    // console.log(date2_list);
+    // console.log(follower2_list);
+    // console.log(following2_list);
+    // console.log(post2_list);
+
+    // 차트 만들기
+    // 분홍
+    create_Chart("collected_chart_follower", date2_list, follower2_list, "followernum", 'rgb(255, 168, 165)', '지난 8주간 팔로워 수 변화');
+    // 노랑
+    create_Chart("collected_chart_following", date2_list, following2_list, "followingnum", 'rgb(255, 230, 80)', '지난 8주간 팔로잉 수 변화');
+    // 파랑
+    create_Chart("collected_chart_post", date2_list, post2_list, "postingnum", 'rgb(0, 100, 255)', '지난 8주간 작성한 전체 게시글 수 변화');
+  }
+
+
+  function createTable(i, ids, followernum, followingnum, postnum, rank) {
+    var table = $("#table");
+    result_predict(i);
+    if (i < 0) {
+      alert("데이터가 잘못되었습니다.");
+    } else {
+      /* id를 앞에 써주면 구별할 수 있음*/
+      // ====================================================
+      // ====================================================
+      // 여기 형식을 바꿔줘야 테이블을 예쁘게 만들 수 있음
+      // ====================================================
+      // ====================================================
+      var tr = $("<tr>");
+      var tr = $("<td>" + ids[i] + "</td>");
+      table.append(tr);
+      var tr = $("<td>" + followernum[i] + "</td>");
+      table.append(tr);
+      var tr = $("<td>" + followingnum[i] + "</td>");
+      table.append(tr);
+      var tr = $("<td>" + postnum[i] + "</td>");
+      table.append(tr);
+      var tr = $("<td>" + rank[i] + "%" + "</td>");
+      table.append(tr);
+      var tr = $("</tr>");
+      /*
+       var tr = $('<tr><td>' +ids[i] + '</td></tr>');
+       table.append(tr);
+       var tr = $('<tr><td>' + followernum[i] + '</td></tr>');
+          table.append(tr);
+       var tr = $('<tr><td>' + followingnum[i] + '</td></tr>');
+          table.append(tr);*/
+      // value = value.replace(/\r/g, "")
+    }
+  }
+
+  function result_predict(i) {
+    const btn2 = document.getElementById("btn");
+    const txt1 = document.getElementById("result-1");
+    const txt2 = document.getElementById("result-2");
+    const txt3 = document.getElementById("result-3");
+    const txt4 = document.getElementById("result-4");
+    const txt5 = document.getElementById("result-5");
+    const txt6 = document.getElementById("result-6");
+
+    txt1.textContent = ids[i];
+    txt2.textContent = rate_rank[i];
+    txt3.textContent = followernum[i];
+    txt4.textContent = nextfollower[i];
+    txt5.textContent = Math.round((nextfollower[i] / followernum[i] - 1) * 100 * 10) / 10;
+    txt6.textContent = Math.round((rate_rank[i] / 199) * 100 * 10) / 10;
+  }
+
+  // events
+
+  // 버튼 클릭하면 입력했던 id 를 받음
+  $("#btn").on("click", function () {
+    $("#important").remove();
+    $("#my_histo").remove();
+    //var id = $(this).val().trim();
+    $('td').remove();
+    var id = document.getElementById("userId").value;
+    renderDataById(id);
+    collected_renderDataById(id);
+  });
+</script>
+
+<script>
+  function create_Chart_reverse(chartid, date, list, attribute_text, colors, title) {
+    var myChart = new Chart(
+      document.getElementById(chartid), {
+      type: 'line',
+      options: {
+        plugins: {
+          title: { display: true, text: title }, legend: { position: 'bottom' }
+        },
+        scales: {
+          y: {
+            reverse: true,
+            // beginAtZero:true
+          },
+          x: {
+            position: 'top',
+            // beginAtZero: true
+          }
+        }
+      },
+      data: {
+        labels: date, // x축
+        datasets: [{
+          label: attribute_text, // 데이터 이름?
+          data: list, // 데이터
+          fill: false, // 채우기
+          borderColor: colors, // 선 색상
+          tension: 0.1 // 선의 물렁한 정도
+        }]
+      }
+    });
+  }
+
+  function create_Chart(chartid, date, list, attribute_text, colors, title) {
+    var myChart = new Chart(
+      document.getElementById(chartid), {
+      type: 'line',
+      options: {
+        plugins: {
+          title: { display: true, text: title }, legend: { position: 'bottom' }
+        }
+      },
+      data: {
+        labels: date, // x축
+        datasets: [{
+          label: attribute_text, // 데이터 이름?
+          data: list, // 데이터
+          fill: false, // 채우기
+          borderColor: colors, // 선 색상
+          tension: 0.1 // 선의 물렁한 정도
+        }]
+      }
+    }
+    );
+  }
+</script>
+
+<!-- 분포 그래프 관련 함수 -->
+<script>
+  // style function
+  function histoStyle(t, r, b, l, w, h) {
+    // set the dimensions and margins of the graph
+    margin = { top: t, right: r, bottom: b, left: l },
+      width = w - margin.left - margin.right,
+      height = h - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    svg = d3.select("#my_histo")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+  }
+
+  // histogram function
+  function drawHisto(data, column, min_value, max_value, bin_size, color) {
+    // X axis: scale and draw:
+    var x = d3.scaleLinear()
+      .domain([min_value, max_value])
+      .range([0, width]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // set the parameters for the histogram
+    var histogram = d3.histogram()
+      .value(function (d) { return d[column]; })
+      .domain(x.domain())
+      .thresholds(x.ticks(bin_size)); // the numbers of bins
+
+    // apply this function to data to get the bins
+    var bins = histogram(data);
+
+    // Y axis: scale and draw:
+    var y = d3.scaleLinear()
+      .range([height, 0]);
+    y.domain([0, d3.max(bins, function (d) { return d.length; })]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // Add a tooltip div
+    var tooltip = d3.select("#my_histo")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "black")
+      .style("color", "white")
+      .style("position", "absolute")
+      .style("width", "150px")
+      .style("border-radius", "8px")
+      .style("padding", "10px");
+
+    // A function that change this tooltip when the user hover a point
+    var showTooltip = function (d) {
+      tooltip
+        .transition()
+        .duration(100)
+        .style("opacity", 0.7)
+      tooltip
+        .html(d.x0 + " - " + d.x1)
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 10) + "px")
+    }
+    var moveTooltip = function (d) {
+      tooltip
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 10) + "px")
+    }
+    // A function that change this tooltip when the leaves a point
+    var hideTooltip = function (d) {
+      tooltip
+        .transition()
+        .duration(100)
+        .style("opacity", 0)
+    }
+
+    // append the bar rectangles to the svg element
+    svg.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+      .attr("x", 1)
+      .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+      .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
+      .attr("height", function (d) { return height - y(d.length); })
+      .style("fill", color)
+      // Show tooltip on hover
+      .on("mouseover", showTooltip)
+      .on("mousemove", moveTooltip)
+      .on("mouseleave", hideTooltip)
+
+    // legend
+    svg.append("circle").attr("cx", 300).attr("cy", 0).attr("r", 6).style("fill", color)
+    svg.append("text").attr("x", 320).attr("y", 0).text(column).style("font-size", "20px").attr("alignment-baseline", "middle")
+  }
+</script>
+
+</html>

@@ -1,0 +1,12 @@
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+/*file 입력 css*/
+.file {
+  margin: 20px 0px 10px 0px;
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,29 @@
+.result {
+  margin: 140px 240px;
+}
+.fa-trophy {
+  color: #FFBD59;
+}
+.result-title {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 60px;
+}
+.result-predict {
+  text-align: center;
+  margin-bottom: 100px;
+  font-size: 18px;
+  font-weight: 500;
+}
+#result-1 {
+  color: #814591;
+  font-size: 44px;
+}
+#result-2,
+#result-3,
+#result-4,
+#result-5,
+#result-6 {
+  color: #814591;
+  font-size: 24px;
+}

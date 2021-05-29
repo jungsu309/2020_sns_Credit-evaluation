@@ -1,0 +1,114 @@
+.intro {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin: 30px; /* 200px 120px 200px*/
+  align-items: center;
+}
+.intro-text {
+  margin-right: 350px;
+}
+.intro-text > h3 {
+  font-size: 32px;
+  line-height: 40px;
+}
+.intro-text > h5 {
+  color: gray;
+  margin: 15px 0px;
+}
+.intro-introduction {
+  display: flex;
+}
+.intro-introduction > p {
+  width: 150px;
+  height: 30px;
+  margin-top: 30px;
+  line-height: 20px;
+}
+.intro-photo {
+  display: flex;
+  margin-left: 400px;
+}
+.intro-photo__icon {
+  display: flex;
+  position: relative;
+}
+.fa-comment-dots {
+  color: #ff9a9e;
+  position: absolute;
+  left: -360px;
+  animation: coinFlip 3s ease-in-out infinite;
+}
+.fa-heart {
+  color: #ff9a9e;
+  position: absolute;
+  top: 240px;
+  left: 30px;
+  animation: coinFlip 3s ease-in-out infinite;
+}
+.fa-hashtag {
+  color: #a6c1ee;
+  position: absolute;
+  top: 160px;
+  left: 60px;
+  animation: coinFlip 3s ease-in-out infinite;
+}
+.fa-heartbeat {
+  color: #fddb92;
+  position: absolute;
+  left: -400px;
+  top: 200px;
+  animation: coinFlip 3s ease-in-out infinite;
+}
+.fa-comments {
+  color: #ddd6f3;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  animation: coinFlip 3s ease-in-out infinite;
+}
+@keyframes coinFlip {
+  0% {
+    transform: rotateY(0);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+.intro-photo__jpg {
+  width: 280px;
+  height: 280px;
+  margin: 0px 10px;
+  box-shadow: 13px 10px 23px rgb(69 64 90 / 55%);
+}
+.IDinput {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px 100px 0px;
+}
+#userId {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 15px;
+  width: 300px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 13px 10px 23px rgb(69 64 90 / 55%);
+}
+#btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 18px;
+  background-color: #CAA4D4;
+  color: white;
+}
+#btn:active {
+  background-color: #CAA4D4;
+}
+#btn:hover {
+  background-color: #7E448E;
+}
